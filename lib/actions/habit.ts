@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { parse } from "date-fns";
 import { getOrCreateDemoUser } from "./check-in";
 
 export interface CreateHabitInput {
@@ -82,11 +83,7 @@ export async function toggleHabitLog(habitId: string, dateStr: string) {
     const user = await getOrCreateDemoUser();
 
     // Parse the dateStr (e.g. "2026-07-22") into local midnight Date
-    const parts = dateStr.split("-");
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; // 0-indexed month
-    const day = parseInt(parts[2], 10);
-    const logDate = new Date(year, month, day);
+    const logDate = parse(dateStr, "yyyy-MM-dd", new Date());
 
     // Look for an existing log for this habit and date
     const existingLog = await prisma.habitLog.findFirst({

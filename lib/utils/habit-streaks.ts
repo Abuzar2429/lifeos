@@ -1,3 +1,5 @@
+import { format, isWeekend, subDays, addDays } from "date-fns";
+
 export interface HabitLog {
   id: string;
   habitId: string;
@@ -28,10 +30,7 @@ export interface HabitWithLogs {
  * Format a Date object to YYYY-MM-DD in the local timezone.
  */
 export function formatDateLocal(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return format(date, "yyyy-MM-dd");
 }
 
 /**
@@ -53,16 +52,14 @@ function normalizeDayName(day: string): string {
  * Check if a habit is scheduled on a given Date.
  */
 export function isHabitScheduled(habit: { frequency: string; customDays: string | null }, date: Date): boolean {
-  const dayMap = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-  const dayName = dayMap[date.getDay()];
+  const dayName = format(date, "eeee").toLowerCase();
 
   if (habit.frequency === "DAILY") {
     return true;
   }
 
   if (habit.frequency === "WEEKDAYS") {
-    const dayNum = date.getDay();
-    return dayNum >= 1 && dayNum <= 5; // Mon to Fri
+    return !isWeekend(date);
   }
 
   if (habit.frequency === "CUSTOM" && habit.customDays) {
@@ -97,15 +94,14 @@ export function calculateHabitStats(habit: HabitWithLogs) {
   // 1. Calculate Current Streak
   let currentStreak = 0;
   let foundFirstCompleted = false;
-  const checkDate = new Date(today);
+  let checkDate = new Date(today);
 
   // Walk backwards up to 365 days or habit creation date
   const oldestAllowed = new Date(habit.createdAt);
   oldestAllowed.setHours(0, 0, 0, 0);
   
-  // Also guard against infinite loops by capping at 365 days
-  const capDate = new Date();
-  capDate.setDate(capDate.getDate() - 365);
+  // Also guard against infinite loops by capping at 365 days using date-fns
+  const capDate = subDays(new Date(), 365);
   const stopDate = oldestAllowed > capDate ? oldestAllowed : capDate;
 
   while (checkDate >= stopDate) {
@@ -130,8 +126,8 @@ export function calculateHabitStats(habit: HabitWithLogs) {
         }
       }
     }
-    // Go to previous day
-    checkDate.setDate(checkDate.getDate() - 1);
+    // Go to previous day using date-fns
+    checkDate = subDays(checkDate, 1);
   }
 
   // 2. Calculate Longest Streak
@@ -139,7 +135,7 @@ export function calculateHabitStats(habit: HabitWithLogs) {
   let runningStreak = 0;
   
   // Start from habit creation date or 365 days ago, whichever is later
-  const forwardDate = new Date(stopDate);
+  let forwardDate = new Date(stopDate);
   forwardDate.setHours(0, 0, 0, 0);
 
   while (forwardDate <= today) {
@@ -162,7 +158,7 @@ export function calculateHabitStats(habit: HabitWithLogs) {
       }
     }
 
-    forwardDate.setDate(forwardDate.getDate() + 1);
+    forwardDate = addDays(forwardDate, 1);
   }
 
   // 3. Compute 7-day Weekly History
@@ -170,8 +166,7 @@ export function calculateHabitStats(habit: HabitWithLogs) {
   const daysOfWeekShorthand = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(today.getDate() - i);
+    const d = subDays(today, i);
     d.setHours(0, 0, 0, 0);
 
     const dateStr = formatDateLocal(d);
@@ -194,7 +189,7 @@ export function calculateHabitStats(habit: HabitWithLogs) {
   // 4. Calculate overall completion rate
   let totalScheduled = 0;
   let totalCompleted = 0;
-  const rateCheck = new Date(stopDate);
+  let rateCheck = new Date(stopDate);
   while (rateCheck <= today) {
     if (isHabitScheduled(habit, rateCheck)) {
       totalScheduled++;
@@ -202,7 +197,7 @@ export function calculateHabitStats(habit: HabitWithLogs) {
         totalCompleted++;
       }
     }
-    rateCheck.setDate(rateCheck.getDate() + 1);
+    rateCheck = addDays(rateCheck, 1);
   }
 
   const completionRate = totalScheduled > 0 ? Math.round((totalCompleted / totalScheduled) * 100) : 0;

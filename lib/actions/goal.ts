@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { parse } from "date-fns";
 import { getOrCreateDemoUser } from "./check-in";
 
 export interface CreateGoalInput {
@@ -25,11 +26,7 @@ export async function createGoal(input: CreateGoalInput) {
     // Parse targetDate string to local midnight Date
     let deadline: Date | null = null;
     if (input.targetDate) {
-      const parts = input.targetDate.split("-");
-      const year = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1;
-      const day = parseInt(parts[2], 10);
-      deadline = new Date(year, month, day);
+      deadline = parse(input.targetDate, "yyyy-MM-dd", new Date());
     }
 
     // Build the milestones list to create inline

@@ -19,6 +19,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import confetti from "canvas-confetti";
+import { differenceInCalendarDays } from "date-fns";
 import {
   updateGoalProgress,
   toggleMilestone,
@@ -94,12 +95,9 @@ export function GoalCard({ goal, onRefresh }: GoalCardProps) {
 
   if (goal.targetDate) {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const deadline = new Date(goal.targetDate);
-    deadline.setHours(0, 0, 0, 0);
 
-    const diffTime = deadline.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = differenceInCalendarDays(deadline, today);
 
     if (diffDays < 0) {
       deadlineBadge = `Overdue by ${Math.abs(diffDays)}d ⚠️`;
