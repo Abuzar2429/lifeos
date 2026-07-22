@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { startOfDay, subDays } from "date-fns";
 import { calculateDailyScore, type CheckInInput } from "@/lib/scoring";
 
 /**
@@ -27,9 +28,7 @@ export async function getOrCreateDemoUser() {
  * Gets today's start timestamp in local midnight boundaries.
  */
 function getTodayMidnight() {
-  const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return startOfDay;
+  return startOfDay(new Date());
 }
 
 /**
@@ -119,9 +118,7 @@ export async function upsertDailyCheckIn(input: CheckInInput) {
 export async function getCheckInHistory(days: number = 7) {
   try {
     const user = await getOrCreateDemoUser();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - (days - 1));
-    startDate.setHours(0, 0, 0, 0);
+    const startDate = subDays(startOfDay(new Date()), days - 1);
 
     const history = await prisma.dailyCheckIn.findMany({
       where: {

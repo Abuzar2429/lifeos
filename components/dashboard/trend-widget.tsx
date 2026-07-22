@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { Activity, Calendar, MessageSquare } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { format } from "date-fns";
 
 export interface CheckInHistoryItem {
   id: string;
@@ -27,8 +28,7 @@ interface TrendWidgetProps {
 
 export function TrendWidget({ history }: TrendWidgetProps) {
   const chartData = history.map((item) => {
-    const d = new Date(item.date);
-    const dayLabel = d.toLocaleDateString("en-US", { weekday: "short" });
+    const dayLabel = format(new Date(item.date), "iii");
     return {
       name: dayLabel,
       score: item.dailyScore,
