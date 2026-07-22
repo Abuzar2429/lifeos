@@ -21,12 +21,28 @@ interface DashboardClientProps {
   todayCheckIn: CheckInInput | null;
   history: CheckInHistoryItem[];
   todayScore: number | null;
+  totalHabitsCount?: number;
+  completedHabitsCount?: number;
+  activeGoalsCount?: number;
+  totalActiveMilestones?: number;
+  completedActiveMilestones?: number;
+  latestJournalTitle?: string | null;
+  latestJournalMood?: string | null;
+  latestJournalSnippet?: string | null;
 }
 
 export function DashboardClient({
   todayCheckIn,
   history,
   todayScore,
+  totalHabitsCount = 0,
+  completedHabitsCount = 0,
+  activeGoalsCount = 0,
+  totalActiveMilestones = 0,
+  completedActiveMilestones = 0,
+  latestJournalTitle = null,
+  latestJournalMood = null,
+  latestJournalSnippet = null,
 }: DashboardClientProps) {
   const getScoreStatus = (score: number | null) => {
     if (score === null) return { label: "Not Logged", color: "bg-zinc-800 text-zinc-400 border-zinc-700" };
@@ -143,9 +159,24 @@ export function DashboardClient({
             <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
           </div>
           <h3 className="text-base font-bold text-white mt-4">Habit Tracker</h3>
-          <p className="text-xs text-zinc-400 mt-1">
-            Build consistency with daily streaks and target tracking.
-          </p>
+          {totalHabitsCount > 0 ? (
+            <div className="mt-2 space-y-2">
+              <div className="flex justify-between text-[11px] text-zinc-400">
+                <span>Today&apos;s Progress</span>
+                <span className="font-semibold text-indigo-400">{completedHabitsCount}/{totalHabitsCount} done</span>
+              </div>
+              <div className="h-1.5 w-full bg-zinc-950 rounded-full overflow-hidden border border-zinc-800/40">
+                <div 
+                  className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-500" 
+                  style={{ width: `${(completedHabitsCount / totalHabitsCount) * 100}%` }}
+                />
+              </div>
+            </div>
+          ) : (
+            <p className="text-xs text-zinc-400 mt-1">
+              Build consistency with daily streaks and target tracking.
+            </p>
+          )}
         </Link>
 
         <Link
@@ -159,9 +190,28 @@ export function DashboardClient({
             <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
           </div>
           <h3 className="text-base font-bold text-white mt-4">Goal Milestones</h3>
-          <p className="text-xs text-zinc-400 mt-1">
-            Define yearly and monthly objectives with step-by-step milestones.
-          </p>
+          {activeGoalsCount > 0 ? (
+            <div className="mt-2 space-y-2">
+              <div className="flex justify-between text-[11px] text-zinc-400">
+                <span>Active Objectives</span>
+                <span className="font-semibold text-purple-400">
+                  {activeGoalsCount} active {totalActiveMilestones > 0 && `• ${completedActiveMilestones}/${totalActiveMilestones} tasks`}
+                </span>
+              </div>
+              {totalActiveMilestones > 0 && (
+                <div className="h-1.5 w-full bg-zinc-950 rounded-full overflow-hidden border border-zinc-800/40">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-500" 
+                    style={{ width: `${(completedActiveMilestones / totalActiveMilestones) * 100}%` }}
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-xs text-zinc-400 mt-1">
+              Define yearly and monthly objectives with step-by-step milestones.
+            </p>
+          )}
         </Link>
 
         <Link
@@ -175,9 +225,37 @@ export function DashboardClient({
             <ArrowRight className="h-4 w-4 text-zinc-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
           </div>
           <h3 className="text-base font-bold text-white mt-4">Smart Journal</h3>
-          <p className="text-xs text-zinc-400 mt-1">
-            Rich-text reflections tagged with mood and sentiment analysis.
-          </p>
+          {latestJournalTitle ? (
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center gap-1.5">
+                {latestJournalMood && (
+                  <span className="text-xs">
+                    {latestJournalMood === "Happy"
+                      ? "😄"
+                      : latestJournalMood === "Calm"
+                      ? "😌"
+                      : latestJournalMood === "Tired"
+                      ? "😴"
+                      : latestJournalMood === "Anxious"
+                      ? "😰"
+                      : latestJournalMood === "Motivated"
+                      ? "🚀"
+                      : "📝"}
+                  </span>
+                )}
+                <span className="text-[11px] font-bold text-emerald-405 truncate max-w-[185px]">
+                  {latestJournalTitle}
+                </span>
+              </div>
+              <p className="text-[10px] text-zinc-400 line-clamp-1 italic">
+                &ldquo;{latestJournalSnippet}&rdquo;
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-zinc-400 mt-1">
+              Rich-text reflections tagged with mood and sentiment analysis.
+            </p>
+          )}
         </Link>
       </div>
     </AppShell>
