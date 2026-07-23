@@ -2,12 +2,14 @@ import { getTodayCheckIn, getCheckInHistory } from "@/lib/actions/check-in";
 import { getHabits } from "@/lib/actions/habit";
 import { getGoals } from "@/lib/actions/goal";
 import { getJournalEntries } from "@/lib/actions/journal";
+import { getExecutiveDailyDigest } from "@/lib/actions/digest";
 import { formatDateLocal } from "@/lib/utils/habit-streaks";
 import { DashboardClient } from "@/components/dashboard/dashboard-client";
 
 export const revalidate = 0; // Disable static caching so dashboard reflects current date/check-ins
 
 export default async function Home() {
+  const digest = await getExecutiveDailyDigest();
   const todayCheckIn = await getTodayCheckIn();
   const history = await getCheckInHistory(7);
   
@@ -45,6 +47,7 @@ export default async function Home() {
 
   return (
     <DashboardClient
+      digest={digest}
       todayCheckIn={todayCheckIn}
       history={history}
       todayScore={todayScore}

@@ -1,18 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, PlusCircle, User } from "lucide-react";
+import { Menu, PlusCircle, User, Search } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface HeaderProps {
   onOpenMobileMenu?: () => void;
   onOpenCheckIn?: () => void;
+  onOpenSearch?: () => void;
   todayScore?: number | null;
 }
 
 export function Header({
   onOpenMobileMenu,
   onOpenCheckIn,
+  onOpenSearch,
   todayScore,
 }: HeaderProps) {
   // Initialize date directly
@@ -41,6 +43,20 @@ export function Header({
           </p>
         </div>
       </div>
+
+      {/* Center/Right: Quick Search Trigger Button */}
+      {onOpenSearch && (
+        <button
+          onClick={onOpenSearch}
+          className="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-700 transition-all shadow-sm"
+        >
+          <Search className="h-3.5 w-3.5 text-indigo-400" />
+          <span>Search or type</span>
+          <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-[10px] font-mono text-zinc-300">
+            Cmd + K
+          </kbd>
+        </button>
+      )}
 
       {/* Right side: Score badge + Quick Check-in Button */}
       <div className="flex items-center gap-3">

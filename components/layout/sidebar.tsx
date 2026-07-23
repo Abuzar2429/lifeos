@@ -12,6 +12,7 @@ import {
   Settings,
   Flame,
   X,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,7 @@ const navigation = [
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Journal", href: "/journal", icon: BookOpen },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
+  { name: "Achievements", href: "/achievements", icon: Trophy },
   { name: "AI Companion", href: "/ai", icon: Sparkles },
 ];
 

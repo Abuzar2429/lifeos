@@ -15,9 +15,12 @@ import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { TrendWidget, CheckInHistoryItem } from "@/components/dashboard/trend-widget";
+import { DailyDigestWidget } from "@/components/dashboard/daily-digest-widget";
+import { type ExecutiveDigest } from "@/lib/actions/digest";
 import { type CheckInInput } from "@/lib/scoring";
 
 interface DashboardClientProps {
+  digest: ExecutiveDigest;
   todayCheckIn: CheckInInput | null;
   history: CheckInHistoryItem[];
   todayScore: number | null;
@@ -32,6 +35,7 @@ interface DashboardClientProps {
 }
 
 export function DashboardClient({
+  digest,
   todayCheckIn,
   history,
   todayScore,
@@ -56,29 +60,8 @@ export function DashboardClient({
 
   return (
     <AppShell todayCheckIn={todayCheckIn} todayScore={todayScore}>
-      {/* Welcome & Quick CTA Banner */}
-      <div className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-zinc-900/40 p-6 md:p-8 backdrop-blur-2xl">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-300">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>LifeOS Executive Control Center</span>
-            </div>
-
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
-              {todayCheckIn ? "You're all checked in for today!" : "Start your daily check-in"}
-            </h1>
-
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              {todayCheckIn
-                ? `Current Daily Score: ${todayScore}/100. Keep up the momentum across your habits and goals.`
-                : "Log your mood, energy, sleep, hydration, and productivity metrics to calculate today's score."}
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Executive Daily Digest Banner */}
+      <DailyDigestWidget digest={digest} />
 
       {/* Metrics Summary Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

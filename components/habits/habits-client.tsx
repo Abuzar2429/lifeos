@@ -14,6 +14,8 @@ import { AppShell } from "@/components/layout/app-shell";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { HabitCard } from "@/components/habits/habit-card";
 import { HabitModal } from "@/components/habits/habit-modal";
+import { ActivityHeatmap } from "@/components/analytics/activity-heatmap";
+import type { HeatmapDay } from "@/lib/actions/heatmap";
 import { type HabitWithLogs, calculateHabitStats, formatDateLocal } from "@/lib/utils/habit-streaks";
 
 interface SerializedHabitLog {
@@ -44,11 +46,12 @@ interface SerializedHabit {
 
 interface HabitsClientProps {
   initialHabits: SerializedHabit[];
+  heatmapDays?: HeatmapDay[];
 }
 
 const categories = ["All", "Fitness", "Study", "Health", "Career", "Reading", "Mindfulness", "General"];
 
-export function HabitsClient({ initialHabits }: HabitsClientProps) {
+export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientProps) {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showArchived, setShowArchived] = useState(false);
@@ -178,6 +181,9 @@ export function HabitsClient({ initialHabits }: HabitsClientProps) {
           iconColor="text-violet-400"
         />
       </div>
+
+      {/* 365-Day Activity Heatmap */}
+      {heatmapDays.length > 0 && <ActivityHeatmap days={heatmapDays} />}
 
       {/* Filters and Search Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-zinc-800/50 pt-6">

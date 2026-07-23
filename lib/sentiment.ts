@@ -1,53 +1,22 @@
-const positiveWords = new Set([
-  "happy", "joy", "joyful", "peace", "peaceful", "calm", "calmness", "excited", "excitement",
-  "grateful", "gratitude", "accomplished", "accomplish", "proud", "productive", "productivity",
-  "success", "successful", "wonderful", "amazing", "great", "good", "excellent", "healthy",
-  "energetic", "energy", "focus", "focused", "discipline", "disciplined", "love", "loved",
-  "satisfied", "satisfaction", "relief", "relieved", "hopeful", "hope", "motivated", "motivation",
-  "active", "rested", "blessed", "optimistic", "cheerful", "refresh", "refreshed", "inspired",
-  "inspire", "glad", "delighted", "awesome", "fantastic", "triumph"
-]);
+import Sentiment from "sentiment";
 
-const negativeWords = new Set([
-  "sad", "sadness", "bad", "angry", "anger", "stressed", "stress", "tired", "tiredness",
-  "anxious", "anxiety", "worried", "worry", "failure", "fail", "failed", "lazy", "laziness",
-  "depressed", "depression", "lonely", "loneliness", "exhausted", "exhaustion", "sick", "sickness",
-  "pain", "painful", "rough", "difficult", "difficulty", "disappointed", "disappointment",
-  "annoyed", "annoyance", "frustrated", "frustration", "overwhelmed", "restless", "bored",
-  "boredom", "guilty", "guilt", "regret", "unproductive", "scared", "fear", "fearful", "weak",
-  "hurt", "grief", "gloomy", "heavy", "stuck"
-]);
+const sentimentAnalyzer = new Sentiment();
 
 /**
- * Analyzes the sentiment of a given text and returns a score from -1.0 to 1.0.
- * Returns 0 if neutral or no emotional words are found.
+ * Analyzes the sentiment of a given text using the AFINN-165 Sentiment Engine.
+ * Returns a normalized score between -1.0 and 1.0 (0 = neutral).
  */
 export function analyzeSentiment(text: string): number {
-  if (!text) return 0;
+  if (!text || text.trim().length === 0) return 0;
 
-  // Normalize text: lowercase, remove non-alphabetic characters except spaces, and split into words
-  const normalized = text
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, " ")
-    .split(/\s+/);
+  // Clean html tags if present
+  const cleanText = text.replace(/<[^>]*>/g, " ");
+  const result = sentimentAnalyzer.analyze(cleanText);
 
-  let positiveCount = 0;
-  let negativeCount = 0;
+  if (!result || result.tokens.length === 0) return 0;
 
-  normalized.forEach((word) => {
-    if (positiveWords.has(word)) {
-      positiveCount++;
-    } else if (negativeWords.has(word)) {
-      negativeCount++;
-    }
-  });
-
-  const totalMatches = positiveCount + negativeCount;
-  if (totalMatches === 0) return 0;
-
-  // Calculate score between -1.0 and +1.0
-  const score = (positiveCount - negativeCount) / totalMatches;
-  
-  // Round to 2 decimal places for clean representation
+  // result.comparative is normalized per-word score (ranging typically from -1.0 to 1.0)
+  // We clamp it between -1.0 and +1.0 and round to 2 decimal places.
+  const score = Math.max(-1.0, Math.min(1.0, result.comparative));
   return Math.round(score * 100) / 100;
 }

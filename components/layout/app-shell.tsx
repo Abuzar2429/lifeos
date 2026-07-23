@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { CheckInModal } from "@/components/check-in/check-in-modal";
+import { CommandPalette } from "@/components/layout/command-palette";
 import { type CheckInInput } from "@/lib/scoring";
 
 interface AppShellProps {
@@ -19,6 +20,18 @@ export function AppShell({
 }: AppShellProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
@@ -33,6 +46,7 @@ export function AppShell({
         <Header
           onOpenMobileMenu={() => setIsMobileSidebarOpen(true)}
           onOpenCheckIn={() => setIsCheckInModalOpen(true)}
+          onOpenSearch={() => setIsSearchOpen(true)}
           todayScore={todayScore}
         />
 
@@ -46,6 +60,12 @@ export function AppShell({
         isOpen={isCheckInModalOpen}
         onClose={() => setIsCheckInModalOpen(false)}
         initialData={todayCheckIn}
+      />
+
+      {/* Global Command Palette */}
+      <CommandPalette
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
       />
     </div>
   );
