@@ -46,21 +46,21 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col bg-zinc-950/80 backdrop-blur-xl border-r border-zinc-800/60 text-zinc-100 transition-transform duration-300 md:static md:translate-x-0",
+          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col bg-white/90 dark:bg-zinc-950/80 backdrop-blur-xl border-r border-zinc-200 dark:border-zinc-800/60 text-zinc-900 dark:text-zinc-100 transition-colors duration-200 transition-transform duration-300 md:static md:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Header / Logo */}
-        <div className="flex h-16 items-center justify-between px-6 border-b border-zinc-800/60">
+        <div className="flex h-16 items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800/60">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 via-indigo-600 to-cyan-500 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
               <Flame className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-500 dark:from-white dark:via-zinc-200 dark:to-zinc-400 bg-clip-text text-transparent">
                 LifeOS
               </span>
-              <span className="text-[10px] uppercase font-medium tracking-wider text-indigo-400">
+              <span className="text-[10px] uppercase font-medium tracking-wider text-indigo-600 dark:text-indigo-400">
                 Personal Control Center
               </span>
             </div>
@@ -70,7 +70,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           {onClose && (
             <button
               onClick={onClose}
-              className="p-1.5 text-zinc-400 hover:text-white rounded-lg md:hidden"
+              className="p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg md:hidden"
             >
               <X className="h-5 w-5" />
             </button>
@@ -79,7 +79,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         {/* Navigation Items */}
         <nav className="flex-1 space-y-1.5 px-3 py-6 overflow-y-auto">
-          <div className="px-3 pb-2 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+          <div className="px-3 pb-2 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
             Menu
           </div>
 
@@ -95,16 +95,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 className={cn(
                   "group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-indigo-600/15 text-indigo-300 border border-indigo-500/30 shadow-sm shadow-indigo-500/10"
-                    : "text-zinc-400 hover:bg-zinc-900/80 hover:text-zinc-100"
+                    ? "bg-indigo-50 dark:bg-indigo-600/15 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 shadow-sm"
+                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/80 hover:text-zinc-900 dark:hover:text-zinc-100"
                 )}
               >
                 <Icon
                   className={cn(
-                    "h-4 + w-4 transition-colors",
+                    "h-4 w-4 transition-colors",
                     isActive
-                      ? "text-indigo-400"
-                      : "text-zinc-500 group-hover:text-zinc-300"
+                      ? "text-indigo-600 dark:text-indigo-400"
+                      : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300"
                   )}
                 />
                 <span>{item.name}</span>
@@ -121,12 +121,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* Quick Footer / Settings */}
-        <div className="p-4 border-t border-zinc-800/60">
+        <div className="p-4 border-t border-zinc-200 dark:border-zinc-800/60">
           <Link
             href="/settings"
-            className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-zinc-400 hover:bg-zinc-900/80 hover:text-zinc-100 transition-colors"
+            className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/80 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
-            <Settings className="h-4 w-4 text-zinc-500" />
+            <Settings className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
             <span>Settings</span>
           </Link>
         </div>

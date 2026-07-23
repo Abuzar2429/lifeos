@@ -16,6 +16,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { TrendWidget, CheckInHistoryItem } from "@/components/dashboard/trend-widget";
 import { DailyDigestWidget } from "@/components/dashboard/daily-digest-widget";
+import { HydrationWidget } from "@/components/dashboard/hydration-widget";
 import { type ExecutiveDigest } from "@/lib/actions/digest";
 import { type CheckInInput } from "@/lib/scoring";
 
@@ -62,6 +63,9 @@ export function DashboardClient({
     <AppShell todayCheckIn={todayCheckIn} todayScore={todayScore}>
       {/* Executive Daily Digest Banner */}
       <DailyDigestWidget digest={digest} />
+
+      {/* Quick Hydration Tracker */}
+      <HydrationWidget currentGlasses={todayCheckIn?.waterGlasses ?? 0} />
 
       {/* Metrics Summary Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

@@ -126,6 +126,7 @@ model HabitLog {
   date        DateTime // Midnight timestamp
   completedAt DateTime @default(now())
   status      Boolean  @default(true)
+  value       Int      @default(1) // Recorded numeric count (e.g. 3 out of 5)
   notes       String?
 
   habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)

@@ -138,3 +138,79 @@ export async function getCheckInHistory(days: number = 7) {
     return [];
   }
 }
+
+/**
+ * Increments or decrements today's water glasses count (+1 glass) and recalculates the daily health score.
+ */
+export async function incrementWaterGlass(delta: number = 1) {
+  try {
+    const user = await getOrCreateDemoUser();
+    const todayMidnight = getTodayMidnight();
+
+    const existing = await prisma.dailyCheckIn.findFirst({
+      where: {
+        userId: user.id,
+        date: todayMidnight,
+      },
+    });
+
+    if (existing) {
+      const newGlasses = Math.max(0, existing.waterGlasses + delta);
+      const updatedInput: CheckInInput = {
+        mood: existing.mood,
+        energy: existing.energy,
+        sleepHours: existing.sleepHours,
+        waterGlasses: newGlasses,
+        workoutMins: existing.workoutMins,
+        studyHours: existing.studyHours,
+        readingMins: existing.readingMins,
+        reflectionNote: existing.reflectionNote,
+      };
+      const dailyScore = calculateDailyScore(updatedInput);
+
+      const updated = await prisma.dailyCheckIn.update({
+        where: { id: existing.id },
+        data: {
+          waterGlasses: newGlasses,
+          dailyScore,
+        },
+      });
+
+      revalidatePath("/");
+      return { success: true, waterGlasses: newGlasses, dailyScore };
+    } else {
+      const newGlasses = Math.max(0, delta);
+      const newInput: CheckInInput = {
+        mood: 3,
+        energy: 3,
+        sleepHours: 7,
+        waterGlasses: newGlasses,
+        workoutMins: 0,
+        studyHours: 0,
+        readingMins: 0,
+      };
+      const dailyScore = calculateDailyScore(newInput);
+
+      const created = await prisma.dailyCheckIn.create({
+        data: {
+          userId: user.id,
+          date: todayMidnight,
+          mood: 3,
+          energy: 3,
+          sleepHours: 7,
+          waterGlasses: newGlasses,
+          workoutMins: 0,
+          studyHours: 0,
+          readingMins: 0,
+          dailyScore,
+        },
+      });
+
+      revalidatePath("/");
+      return { success: true, waterGlasses: newGlasses, dailyScore };
+    }
+  } catch (error) {
+    console.error("Error incrementing water glass:", error);
+    return { success: false, error: "Failed to update water intake." };
+  }
+}

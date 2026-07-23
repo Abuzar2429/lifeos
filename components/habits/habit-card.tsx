@@ -15,9 +15,11 @@ import {
   Check,
   Calendar,
   AlertCircle,
+  Plus,
+  Minus,
 } from "lucide-react";
 import confetti from "canvas-confetti";
-import { toggleHabitLog, archiveHabit, unarchiveHabit, deleteHabit } from "@/lib/actions/habit";
+import { toggleHabitLog, updateHabitLogValue, archiveHabit, unarchiveHabit, deleteHabit } from "@/lib/actions/habit";
 import { calculateHabitStats, type HabitWithLogs, formatDateLocal } from "@/lib/utils/habit-streaks";
 
 interface HabitCardProps {
@@ -43,6 +45,11 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
   const stats = calculateHabitStats(habit);
   
   const todayStr = formatDateLocal(new Date());
+  const todayLog = habit.logs.find((l) => formatDateLocal(new Date(l.date)) === todayStr);
+  const targetValue = habit.targetValue || 1;
+  const isMultiCount = targetValue > 1;
+
+  const currentLoggedValue = todayLog?.value ?? (todayLog?.status ? targetValue : 0);
   const isCompletedToday = stats.weeklyHistory.find((h) => h.dateStr === todayStr)?.status === "completed";
 
   const config = categoryConfig[habit.category] || categoryConfig.General;
@@ -54,6 +61,24 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
       if (res.success) {
         if (res.action === "created") {
           // Spark confetti!
+          confetti({
+            particleCount: 80,
+            spread: 50,
+            origin: { y: 0.8 },
+            colors: ["#6366f1", "#a855f7", "#ec4899", "#10b981", "#3b82f6"],
+          });
+        }
+        if (onRefresh) onRefresh();
+      }
+    });
+  };
+
+  const handleStepValue = (delta: number) => {
+    const nextValue = Math.max(0, Math.min(targetValue * 2, currentLoggedValue + delta));
+    startTransition(async () => {
+      const res = await updateHabitLogValue(habit.id, todayStr, nextValue);
+      if (res.success) {
+        if (res.isCompleted && nextValue >= targetValue) {
           confetti({
             particleCount: 80,
             spread: 50,
@@ -166,6 +191,42 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
           </button>
         </div>
       </div>
+
+      {/* Multi-Count Progress Stepper Bar */}
+      {isMultiCount && (
+        <div className="mt-4 space-y-2 bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-zinc-400 font-medium">Daily Progress</span>
+            <span className="font-bold text-indigo-400">
+              {currentLoggedValue} / {targetValue} {habit.unit || "times"}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleStepValue(-1)}
+              disabled={isPending || currentLoggedValue <= 0}
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold disabled:opacity-30 transition-colors"
+              title="Decrease count"
+            >
+              <Minus className="h-3.5 w-3.5" />
+            </button>
+            <div className="flex-1 h-2 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+              <div
+                className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-300"
+                style={{ width: `${Math.min(100, (currentLoggedValue / targetValue) * 100)}%` }}
+              />
+            </div>
+            <button
+              onClick={() => handleStepValue(1)}
+              disabled={isPending}
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-sm shadow-indigo-600/20 disabled:opacity-40 transition-colors"
+              title="Increase count"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Target details */}
       <div className="mt-4 flex items-center justify-between text-[11px] text-zinc-500 border-t border-zinc-800/50 pt-3">

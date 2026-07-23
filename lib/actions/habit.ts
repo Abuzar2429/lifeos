@@ -104,12 +104,15 @@ export async function toggleHabitLog(habitId: string, dateStr: string) {
       return { success: true, action: "removed" };
     } else {
       // If it doesn't exist, create it (toggle on)
+      const habit = await prisma.habit.findUnique({ where: { id: habitId } });
+      const targetVal = habit?.targetValue || 1;
       const newLog = await prisma.habitLog.create({
         data: {
           habitId,
           userId: user.id,
           date: logDate,
           status: true,
+          value: targetVal,
         },
       });
       revalidatePath("/habits");
@@ -119,6 +122,68 @@ export async function toggleHabitLog(habitId: string, dateStr: string) {
   } catch (error) {
     console.error("Error toggling habit log:", error);
     return { success: false, error: "Failed to toggle habit log." };
+  }
+}
+
+/**
+ * Sets or updates numeric progress for a habit log (e.g. 3 out of 5 times).
+ */
+export async function updateHabitLogValue(habitId: string, dateStr: string, value: number) {
+  try {
+    const user = await getOrCreateDemoUser();
+    const logDate = parse(dateStr, "yyyy-MM-dd", new Date());
+
+    const habit = await prisma.habit.findUnique({
+      where: { id: habitId },
+    });
+
+    if (!habit) return { success: false, error: "Habit not found." };
+
+    const targetValue = habit.targetValue || 1;
+    const isCompleted = value >= targetValue;
+
+    const existingLog = await prisma.habitLog.findFirst({
+      where: { habitId, userId: user.id, date: logDate },
+    });
+
+    if (value <= 0) {
+      if (existingLog) {
+        await prisma.habitLog.delete({ where: { id: existingLog.id } });
+      }
+      revalidatePath("/habits");
+      revalidatePath("/");
+      return { success: true, action: "removed", value: 0, isCompleted: false };
+    }
+
+    if (existingLog) {
+      const updated = await prisma.habitLog.update({
+        where: { id: existingLog.id },
+        data: {
+          value,
+          status: isCompleted,
+        },
+      });
+      revalidatePath("/habits");
+      revalidatePath("/");
+      return { success: true, action: "updated", log: updated, isCompleted };
+    }
+
+    const created = await prisma.habitLog.create({
+      data: {
+        habitId,
+        userId: user.id,
+        date: logDate,
+        value,
+        status: isCompleted,
+      },
+    });
+
+    revalidatePath("/habits");
+    revalidatePath("/");
+    return { success: true, action: "created", log: created, isCompleted };
+  } catch (error) {
+    console.error("Error updating habit log value:", error);
+    return { success: false, error: "Failed to update habit progress." };
   }
 }
 

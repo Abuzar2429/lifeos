@@ -34,7 +34,7 @@ export function AppShell({
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="flex min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans antialiased transition-colors duration-200 selection:bg-indigo-500/30 selection:text-indigo-200">
       {/* Sidebar */}
       <Sidebar
         isOpen={isMobileSidebarOpen}

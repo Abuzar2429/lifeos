@@ -7,6 +7,7 @@ export interface HabitLog {
   date: Date;
   completedAt: Date;
   status: boolean;
+  value?: number;
   notes: string | null;
 }
 
@@ -83,7 +84,8 @@ export function calculateHabitStats(habit: HabitWithLogs) {
   // Extract all completed log dates formatted as YYYY-MM-DD
   const completedDates = new Set<string>();
   habit.logs.forEach((log) => {
-    if (log.status) {
+    const isCompleted = log.status || (log.value ?? 1) >= (habit.targetValue || 1);
+    if (isCompleted) {
       completedDates.add(formatDateLocal(new Date(log.date)));
     }
   });
