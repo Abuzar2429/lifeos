@@ -20,22 +20,22 @@ export function MetricCard({
   gradient = "from-indigo-500/10 via-purple-500/5 to-transparent",
   iconColor = "text-indigo-600 dark:text-indigo-400",
   badge,
-  badgeColor = "bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border-indigo-500/30",
+  badgeColor = "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border-indigo-500/20",
 }: MetricCardProps) {
   return (
     <div
       className={cn(
-        "neo-glass-card relative overflow-hidden rounded-2xl p-5 transition-all duration-300",
+        "precision-card relative overflow-hidden rounded-2xl p-5",
         `bg-gradient-to-br ${gradient}`
       )}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             {title}
           </span>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
+            <span className="text-2xl md:text-3xl font-extrabold tracking-tight font-mono text-zinc-900 dark:text-white">
               {value}
             </span>
             {badge && (
@@ -54,8 +54,8 @@ export function MetricCard({
           )}
         </div>
 
-        <div className={cn("neo-button p-3 rounded-xl", iconColor)}>
-          <Icon className="h-5 w-5" />
+        <div className={cn("precision-btn p-3 rounded-xl", iconColor)}>
+          <Icon className="h-4.5 w-4.5" />
         </div>
       </div>
     </div>

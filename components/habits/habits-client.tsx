@@ -111,7 +111,7 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
   return (
     <AppShell>
       {/* Page Header banner */}
-      <div className="neo-glass relative overflow-hidden rounded-3xl p-6 md:p-8">
+      <div className="precision-card relative overflow-hidden rounded-3xl p-6 md:p-8">
         <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -127,7 +127,7 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="neo-button flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-indigo-600 dark:text-indigo-300 hover:scale-105 transition-all"
+            className="precision-btn flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-indigo-600 dark:text-indigo-300 hover:scale-105 transition-all"
           >
             <Plus className="h-4.5 w-4.5 stroke-[2.5]" />
             <span>Add Habit</span>

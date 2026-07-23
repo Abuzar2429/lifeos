@@ -45,19 +45,19 @@ export function TrendWidget({ history }: TrendWidgetProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* 7-Day Performance Chart */}
-      <div className="lg:col-span-2 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-6 backdrop-blur-xl space-y-4">
+      <div className="precision-card lg:col-span-2 rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+            <div className="precision-btn p-2 rounded-xl text-indigo-600 dark:text-indigo-400">
               <Activity className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">7-Day Score Trend</h3>
-              <p className="text-xs text-zinc-400">Daily score performance overview</p>
+              <h3 className="text-base font-bold text-zinc-900 dark:text-white">7-Day Score Trend</h3>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">Daily score performance overview</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-indigo-300 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 font-medium">
+          <div className="precision-btn flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-300 px-3 py-1 rounded-full font-medium">
             <Calendar className="h-3.5 w-3.5" />
             Past 7 Days
           </div>
@@ -89,10 +89,10 @@ export function TrendWidget({ history }: TrendWidgetProps) {
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#18181b",
-                    borderColor: "#27272a",
+                    backgroundColor: "var(--card)",
+                    borderColor: "rgba(120, 120, 140, 0.2)",
                     borderRadius: "0.75rem",
-                    color: "#f4f4f5",
+                    color: "var(--foreground)",
                     fontSize: "0.75rem",
                   }}
                   formatter={(val) => [`${val ?? 0} pts`, "Score"]}
@@ -109,21 +109,21 @@ export function TrendWidget({ history }: TrendWidgetProps) {
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="flex h-56 items-center justify-center text-xs text-zinc-500 border border-dashed border-zinc-800 rounded-xl">
+          <div className="flex h-56 items-center justify-center text-xs text-zinc-500 dark:text-zinc-400 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
             No check-in history logged yet. Complete your first check-in above!
           </div>
         )}
       </div>
 
       {/* Reflections Sidebar Widget */}
-      <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-6 backdrop-blur-xl flex flex-col space-y-4">
+      <div className="precision-card rounded-2xl p-6 flex flex-col space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+          <div className="precision-btn p-2 rounded-xl text-purple-600 dark:text-purple-400">
             <MessageSquare className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white">Recent Reflections</h3>
-            <p className="text-xs text-zinc-400">Your logged notes & thoughts</p>
+            <h3 className="text-base font-bold text-zinc-900 dark:text-white">Recent Reflections</h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Your logged notes & thoughts</p>
           </div>
         </div>
 
@@ -132,20 +132,20 @@ export function TrendWidget({ history }: TrendWidgetProps) {
             reflections.map((item) => (
               <div
                 key={item.id}
-                className="p-3.5 rounded-xl bg-zinc-950/60 border border-zinc-800/60 space-y-1.5"
+                className="precision-well p-3.5 rounded-xl space-y-1.5"
               >
-                <div className="flex items-center justify-between text-[11px] font-medium text-zinc-400">
+                <div className="flex items-center justify-between text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
                   <span>{formatDate(item.date)}</span>
-                  <span className="text-indigo-400 font-semibold">{item.dailyScore}/100</span>
+                  <span className="text-indigo-600 dark:text-indigo-400 font-semibold font-mono">{item.dailyScore}/100</span>
                 </div>
-                <p className="text-xs text-zinc-300 italic line-clamp-3">
+                <p className="text-xs text-zinc-700 dark:text-zinc-300 italic line-clamp-3">
                   &quot;{item.reflectionNote}&quot;
                 </p>
               </div>
             ))
           ) : (
             <div className="flex flex-col items-center justify-center h-full py-8 text-center">
-              <span className="text-xs text-zinc-500">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
                 No reflection notes added yet. Add a note during your check-in!
               </span>
             </div>

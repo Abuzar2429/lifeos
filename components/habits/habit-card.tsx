@@ -122,7 +122,7 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
   };
 
   return (
-    <div className="neo-glass-card relative group overflow-hidden rounded-2xl p-5 transition-all duration-300">
+    <div className="precision-card relative group overflow-hidden rounded-2xl p-5 transition-all duration-200">
       {/* Background Accent glow */}
       <div className={`absolute top-0 right-0 -mt-16 -mr-16 h-36 w-36 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-2xl pointer-events-none ${config.bg.replace('/10', '/30')}`} />
 
@@ -135,8 +135,8 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
             disabled={isPending}
             className={`mt-1 flex h-7 w-7 flex-none items-center justify-center rounded-full border transition-all ${
               isCompletedToday
-                ? "bg-indigo-600 border-indigo-500 text-white shadow-md shadow-indigo-500/20 scale-105"
-                : "border-zinc-300 dark:border-zinc-700 hover:border-indigo-500/50 bg-zinc-100 dark:bg-zinc-950/40"
+                ? "bg-emerald-600 border-emerald-500 text-white shadow-md shadow-emerald-500/20 scale-105"
+                : "border-zinc-300 dark:border-zinc-700 hover:border-emerald-500/50 bg-zinc-100 dark:bg-zinc-950/40"
             } disabled:opacity-50`}
           >
             {isCompletedToday ? (
@@ -148,15 +148,15 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
 
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${config.bg} ${config.text} ${config.border}`}>
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${config.bg} ${config.text} ${config.border}`}>
                 <CategoryIcon className="h-3 w-3" />
                 {habit.category}
               </span>
 
               {stats.currentStreak > 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">
-                  <Flame className="h-3 w-3 animate-pulse" />
-                  {stats.currentStreak} day streak
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">
+                  <Flame className="h-3 w-3 text-amber-500" />
+                  {stats.currentStreak}d streak
                 </span>
               )}
             </div>
@@ -178,14 +178,14 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
           <button
             onClick={handleArchive}
             title={habit.archived ? "Restore Habit" : "Archive Habit"}
-            className="neo-button p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+            className="precision-btn p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
           >
             {habit.archived ? <ArchiveRestore className="h-3.5 w-3.5" /> : <Archive className="h-3.5 w-3.5" />}
           </button>
           <button
             onClick={() => setShowConfirmDelete(true)}
             title="Delete Habit"
-            className="neo-button p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+            className="precision-btn p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -194,10 +194,10 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
 
       {/* Multi-Count Progress Stepper Bar */}
       {isMultiCount && (
-        <div className="neo-inset mt-4 space-y-2 p-3 rounded-xl">
+        <div className="precision-well mt-4 space-y-2 p-3.5 rounded-xl">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-zinc-500 dark:text-zinc-400 font-medium">Daily Progress</span>
-            <span className="font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="text-zinc-500 dark:text-zinc-400 font-medium">Daily Target Progress</span>
+            <span className="font-bold font-mono text-indigo-600 dark:text-indigo-400">
               {currentLoggedValue} / {targetValue} {habit.unit || "times"}
             </span>
           </div>
@@ -205,21 +205,21 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
             <button
               onClick={() => handleStepValue(-1)}
               disabled={isPending || currentLoggedValue <= 0}
-              className="neo-button flex h-7 w-7 items-center justify-center rounded-lg text-zinc-700 dark:text-zinc-300 text-xs font-bold disabled:opacity-30 transition-colors"
+              className="precision-btn flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold disabled:opacity-30 transition-colors"
               title="Decrease count"
             >
               <Minus className="h-3.5 w-3.5" />
             </button>
-            <div className="neo-inset flex-1 h-2 rounded-full overflow-hidden">
+            <div className="precision-well flex-1 h-2 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-500 dark:to-violet-500 rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-indigo-600 to-emerald-600 dark:from-indigo-500 dark:to-emerald-500 rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(100, (currentLoggedValue / targetValue) * 100)}%` }}
               />
             </div>
             <button
               onClick={() => handleStepValue(1)}
               disabled={isPending}
-              className="neo-button flex h-7 w-7 items-center justify-center rounded-lg text-indigo-600 dark:text-indigo-300 text-xs font-bold disabled:opacity-40 transition-colors"
+              className="precision-btn flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold disabled:opacity-40 transition-colors"
               title="Increase count"
             >
               <Plus className="h-3.5 w-3.5" />

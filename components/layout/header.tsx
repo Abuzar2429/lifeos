@@ -59,7 +59,7 @@ export function Header({
         </button>
       )}
 
-      {/* Right side: Score badge + Theme Toggle + Quick Check-in Button */}
+      {/* Right side: Score badge + Quick Check-in Button */}
       <div className="flex items-center gap-3">
         {todayScore !== undefined && todayScore !== null && (
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-medium">
@@ -77,9 +77,6 @@ export function Header({
             </span>
           </div>
         )}
-
-        {/* Theme Toggle Button */}
-        <ThemeToggle />
 
         {onOpenCheckIn && (
           <button
