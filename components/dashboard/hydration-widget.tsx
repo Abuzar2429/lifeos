@@ -31,17 +31,17 @@ export function HydrationWidget({
   const percentage = Math.min(100, Math.round((glasses / targetGlasses) * 100));
 
   return (
-    <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-cyan-950/30 via-zinc-900/60 to-zinc-950/80 p-5 shadow-lg space-y-4">
+    <div className="neo-glass rounded-2xl p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
-            <Droplet className="h-5 w-5 fill-cyan-400/20" />
+          <div className="neo-button flex h-10 w-10 items-center justify-center rounded-xl text-cyan-600 dark:text-cyan-400">
+            <Droplet className="h-5 w-5 fill-cyan-500/20" />
           </div>
           <div>
-            <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <h3 className="font-bold text-sm text-zinc-900 dark:text-white flex items-center gap-2">
               Quick Hydration Tracker
             </h3>
-            <p className="text-xs text-zinc-400">Log glasses of water throughout your day</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Log glasses of water throughout your day</p>
           </div>
         </div>
 
@@ -50,20 +50,20 @@ export function HydrationWidget({
           <button
             onClick={() => handleWaterClick(-1)}
             disabled={isPending || glasses <= 0}
-            className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold disabled:opacity-30 transition-colors"
+            className="neo-button flex h-8 w-8 items-center justify-center rounded-xl text-zinc-700 dark:text-zinc-300 text-xs font-bold disabled:opacity-30 transition-all"
             title="Minus 1 Glass"
           >
             <Minus className="h-4 w-4" />
           </button>
 
-          <span className="text-sm font-extrabold text-white px-2 min-w-[60px] text-center">
+          <span className="text-sm font-extrabold text-zinc-900 dark:text-white px-2 min-w-[60px] text-center">
             {glasses} / {targetGlasses}
           </span>
 
           <button
             onClick={() => handleWaterClick(1)}
             disabled={isPending}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 disabled:opacity-50 transition-all hover:scale-105"
+            className="neo-button flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-cyan-700 dark:text-cyan-300 text-xs font-bold disabled:opacity-50 transition-all hover:scale-105"
             title="Add 1 Glass of Water"
           >
             <Plus className="h-4 w-4" />
@@ -75,14 +75,14 @@ export function HydrationWidget({
       {/* Progress Bar */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between text-[11px]">
-          <span className="text-zinc-400 font-medium">Daily Target ({targetGlasses} glasses)</span>
-          <span className="font-bold text-cyan-400">
+          <span className="text-zinc-500 dark:text-zinc-400 font-medium">Daily Target ({targetGlasses} glasses)</span>
+          <span className="font-bold text-cyan-600 dark:text-cyan-400">
             {percentage}% {glasses >= targetGlasses && " • Target Reached! 💧"}
           </span>
         </div>
-        <div className="h-2 w-full bg-zinc-950 rounded-full overflow-hidden border border-zinc-800">
+        <div className="neo-inset h-2 w-full rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500"
+            className="h-full bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500 rounded-full transition-all duration-500"
             style={{ width: `${percentage}%` }}
           />
         </div>

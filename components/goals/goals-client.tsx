@@ -109,23 +109,23 @@ export function GoalsClient({ initialGoals }: GoalsClientProps) {
   return (
     <AppShell>
       {/* Page Header banner */}
-      <div className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-zinc-900/40 p-6 md:p-8 backdrop-blur-2xl">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none" />
+      <div className="neo-glass relative overflow-hidden rounded-3xl p-6 md:p-8">
+        <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-purple-500/10 dark:bg-purple-600/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              <Target className="h-7 w-7 text-purple-400" />
-              Goal Objectives
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
+              <Target className="h-7 w-7 text-purple-600 dark:text-purple-400" />
+              Goal Objectives & Milestone Execution
             </h1>
-            <p className="text-sm text-zinc-400 max-w-xl">
-              Map out monthly and yearly milestones to track your progress systematically.
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
+              Map out monthly and yearly milestones to track your life objectives systematically.
             </p>
           </div>
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-sm font-semibold text-white shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="neo-button flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-purple-600 dark:text-purple-300 hover:scale-105 transition-all"
           >
             <Plus className="h-4.5 w-4.5 stroke-[2.5]" />
             <span>Add Goal</span>
@@ -141,7 +141,7 @@ export function GoalsClient({ initialGoals }: GoalsClientProps) {
           subtitle="In-progress objectives"
           icon={Target}
           gradient="from-purple-600/15 via-purple-900/5 to-transparent"
-          iconColor="text-purple-400"
+          iconColor="text-purple-600 dark:text-purple-400"
         />
 
         <MetricCard
@@ -150,7 +150,7 @@ export function GoalsClient({ initialGoals }: GoalsClientProps) {
           subtitle="Accomplished objectives"
           icon={Trophy}
           gradient="from-emerald-600/15 via-emerald-900/5 to-transparent"
-          iconColor="text-emerald-400"
+          iconColor="text-emerald-600 dark:text-emerald-400"
         />
 
         <MetricCard
@@ -159,9 +159,9 @@ export function GoalsClient({ initialGoals }: GoalsClientProps) {
           subtitle="Past target deadlines"
           icon={AlertCircle}
           gradient="from-rose-600/15 via-rose-900/5 to-transparent"
-          iconColor="text-rose-400"
+          iconColor="text-rose-600 dark:text-rose-400"
           badge={overdueCount > 0 ? "Action Required" : undefined}
-          badgeColor="bg-rose-500/15 text-rose-300 border-rose-500/30"
+          badgeColor="bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30"
         />
 
         <MetricCard
@@ -170,12 +170,12 @@ export function GoalsClient({ initialGoals }: GoalsClientProps) {
           subtitle="Checklist completion rate"
           icon={CheckCircle2}
           gradient="from-indigo-600/15 via-indigo-900/5 to-transparent"
-          iconColor="text-indigo-400"
+          iconColor="text-indigo-600 dark:text-indigo-400"
         />
       </div>
 
       {/* Filters and Search Bar */}
-      <div className="space-y-4 border-t border-zinc-800/50 pt-6">
+      <div className="space-y-4 border-t border-zinc-200 dark:border-zinc-800/50 pt-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Timeframe Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">

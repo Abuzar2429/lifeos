@@ -111,23 +111,23 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
   return (
     <AppShell>
       {/* Page Header banner */}
-      <div className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-zinc-900/40 p-6 md:p-8 backdrop-blur-2xl">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none" />
+      <div className="neo-glass relative overflow-hidden rounded-3xl p-6 md:p-8">
+        <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-indigo-500/10 dark:bg-indigo-600/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-              <CheckSquare className="h-7 w-7 text-indigo-400" />
-              Habit Tracker
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
+              <CheckSquare className="h-7 w-7 text-indigo-600 dark:text-indigo-400" />
+              Habit & Fitness Routine Tracker
             </h1>
-            <p className="text-sm text-zinc-400 max-w-xl">
-              Build lasting discipline by tracking daily routines and watching your streaks grow.
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
+              Build lasting discipline by tracking daily routines, setting target counts, and watching your streaks grow.
             </p>
           </div>
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="neo-button flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-indigo-600 dark:text-indigo-300 hover:scale-105 transition-all"
           >
             <Plus className="h-4.5 w-4.5 stroke-[2.5]" />
             <span>Add Habit</span>
@@ -143,7 +143,7 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
           subtitle="Active routines"
           icon={CheckSquare}
           gradient="from-indigo-600/15 via-indigo-900/5 to-transparent"
-          iconColor="text-indigo-400"
+          iconColor="text-indigo-600 dark:text-indigo-400"
         />
 
         <MetricCard
@@ -152,13 +152,13 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
           subtitle="Daily progress"
           icon={CheckSquare}
           gradient="from-emerald-600/15 via-emerald-900/5 to-transparent"
-          iconColor="text-emerald-400"
+          iconColor="text-emerald-600 dark:text-emerald-400"
           badge={
             activeHabits.length > 0 && completedTodayCount === activeHabits.length
               ? "All Done! 🎉"
               : undefined
           }
-          badgeColor="bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+          badgeColor="bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
         />
 
         <MetricCard
@@ -167,9 +167,9 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
           subtitle="Consistent streak"
           icon={Flame}
           gradient="from-amber-600/15 via-amber-900/5 to-transparent"
-          iconColor="text-amber-400"
+          iconColor="text-amber-600 dark:text-amber-400"
           badge={maxStreak > 0 ? "🔥 Hot" : undefined}
-          badgeColor="bg-amber-500/15 text-amber-300 border-amber-500/30"
+          badgeColor="bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30"
         />
 
         <MetricCard
@@ -178,7 +178,7 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
           subtitle="Overall success rate"
           icon={Trophy}
           gradient="from-violet-600/15 via-violet-900/5 to-transparent"
-          iconColor="text-violet-400"
+          iconColor="text-violet-600 dark:text-violet-400"
         />
       </div>
 
@@ -186,17 +186,17 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
       {heatmapDays.length > 0 && <ActivityHeatmap days={heatmapDays} />}
 
       {/* Filters and Search Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-zinc-800/50 pt-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-zinc-200 dark:border-zinc-800/50 pt-6">
         {/* Category Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                 selectedCategory === cat
-                  ? "bg-indigo-600/15 text-indigo-300 border-indigo-500/30 shadow-sm"
-                  : "bg-zinc-950/20 border-zinc-800/80 text-zinc-400 hover:border-zinc-700"
+                  ? "neo-button text-indigo-600 dark:text-indigo-400 border-indigo-500/30"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
               }`}
             >
               {cat}
@@ -207,22 +207,22 @@ export function HabitsClient({ initialHabits, heatmapDays = [] }: HabitsClientPr
         {/* Search & Archives Toggle */}
         <div className="flex items-center gap-3">
           <div className="relative flex-1 md:w-64">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-500" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
             <input
               type="text"
               placeholder="Search habits..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl bg-zinc-950/60 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500"
+              className="neo-inset w-full pl-9 pr-4 py-2 rounded-xl text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none"
             />
           </div>
 
           <button
             onClick={() => setShowArchived(!showArchived)}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            className={`neo-button flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
               showArchived
-                ? "bg-zinc-800 border-zinc-700 text-zinc-200"
-                : "bg-zinc-950/20 border-zinc-800/85 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700"
+                ? "text-zinc-900 dark:text-zinc-100"
+                : "text-zinc-500 dark:text-zinc-400"
             }`}
           >
             <Archive className="h-3.5 w-3.5" />

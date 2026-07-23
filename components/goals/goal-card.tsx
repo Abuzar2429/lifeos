@@ -201,7 +201,7 @@ export function GoalCard({ goal, onRefresh }: GoalCardProps) {
   };
 
   return (
-    <div className="relative group overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 backdrop-blur-xl hover:border-zinc-700/60 hover:bg-zinc-900/60 transition-all duration-300">
+    <div className="neo-glass-card relative group overflow-hidden rounded-2xl p-5 transition-all duration-300">
       {/* Background Accent glow */}
       <div className={`absolute top-0 right-0 -mt-16 -mr-16 h-36 w-36 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-2xl pointer-events-none ${config.bg.replace('/10', '/30')}`} />
 
@@ -213,7 +213,7 @@ export function GoalCard({ goal, onRefresh }: GoalCardProps) {
               <CategoryIcon className="h-3 w-3" />
               {goal.category}
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-850/50 border border-zinc-800 text-zinc-400">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-850/50 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
               <Calendar className="h-3 w-3" />
               {goal.timeframe.charAt(0) + goal.timeframe.slice(1).toLowerCase()}
             </span>
@@ -224,12 +224,12 @@ export function GoalCard({ goal, onRefresh }: GoalCardProps) {
             )}
           </div>
 
-          <h3 className={`text-base font-bold tracking-tight text-white mt-1.5 transition-all ${goal.completed ? "line-through text-zinc-500" : ""}`}>
+          <h3 className={`text-base font-bold tracking-tight text-zinc-900 dark:text-white mt-1.5 transition-all ${goal.completed ? "line-through text-zinc-400 dark:text-zinc-500" : ""}`}>
             {goal.title}
           </h3>
 
           {goal.description && (
-            <p className="text-xs text-zinc-400 leading-normal max-w-sm mt-1">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-normal max-w-sm mt-1">
               {goal.description}
             </p>
           )}
@@ -240,7 +240,7 @@ export function GoalCard({ goal, onRefresh }: GoalCardProps) {
           <button
             onClick={() => setShowConfirmDelete(true)}
             title="Delete Goal"
-            className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800/80 transition-colors"
+            className="neo-button p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -252,17 +252,17 @@ export function GoalCard({ goal, onRefresh }: GoalCardProps) {
         {/* Numerical Target Progress Bar */}
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs">
-            <span className="font-semibold text-zinc-400 flex items-center gap-1">
-              <Target className="h-3.5 w-3.5 text-purple-400" />
+            <span className="font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-1">
+              <Target className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
               Numerical Target
             </span>
-            <span className="font-bold text-white">
+            <span className="font-bold text-zinc-900 dark:text-white">
               {goal.currentValue} / {goal.targetValue} {goal.unit || "%"}
             </span>
           </div>
-          <div className="h-2 w-full bg-zinc-950 rounded-full overflow-hidden border border-zinc-800/40">
+          <div className="neo-inset h-2 w-full rounded-full overflow-hidden">
             <div
-              className={`h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-500 rounded-full transition-all duration-500 ${
+              className={`h-full bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 dark:from-purple-500 dark:via-indigo-500 dark:to-cyan-500 rounded-full transition-all duration-500 ${
                 goal.completed ? "from-emerald-500 to-teal-500" : ""
               }`}
               style={{ width: `${clampedNumericalPercent}%` }}

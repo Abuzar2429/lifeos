@@ -122,7 +122,7 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
   };
 
   return (
-    <div className="relative group overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 backdrop-blur-xl hover:border-zinc-700/60 hover:bg-zinc-900/60 transition-all duration-300">
+    <div className="neo-glass-card relative group overflow-hidden rounded-2xl p-5 transition-all duration-300">
       {/* Background Accent glow */}
       <div className={`absolute top-0 right-0 -mt-16 -mr-16 h-36 w-36 rounded-full opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-2xl pointer-events-none ${config.bg.replace('/10', '/30')}`} />
 
@@ -136,7 +136,7 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
             className={`mt-1 flex h-7 w-7 flex-none items-center justify-center rounded-full border transition-all ${
               isCompletedToday
                 ? "bg-indigo-600 border-indigo-500 text-white shadow-md shadow-indigo-500/20 scale-105"
-                : "border-zinc-700 hover:border-indigo-500/50 bg-zinc-950/40"
+                : "border-zinc-300 dark:border-zinc-700 hover:border-indigo-500/50 bg-zinc-100 dark:bg-zinc-950/40"
             } disabled:opacity-50`}
           >
             {isCompletedToday ? (
@@ -154,19 +154,19 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
               </span>
 
               {stats.currentStreak > 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">
                   <Flame className="h-3 w-3 animate-pulse" />
                   {stats.currentStreak} day streak
                 </span>
               )}
             </div>
 
-            <h3 className={`text-base font-bold tracking-tight text-white transition-all ${isCompletedToday ? "line-through text-zinc-500" : ""}`}>
+            <h3 className={`text-base font-bold tracking-tight text-zinc-900 dark:text-white transition-all ${isCompletedToday ? "line-through text-zinc-400 dark:text-zinc-500" : ""}`}>
               {habit.title}
             </h3>
 
             {habit.description && (
-              <p className="text-xs text-zinc-400 leading-normal max-w-sm">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-normal max-w-sm">
                 {habit.description}
               </p>
             )}
@@ -178,14 +178,14 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
           <button
             onClick={handleArchive}
             title={habit.archived ? "Restore Habit" : "Archive Habit"}
-            className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/80 transition-colors"
+            className="neo-button p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
           >
             {habit.archived ? <ArchiveRestore className="h-3.5 w-3.5" /> : <Archive className="h-3.5 w-3.5" />}
           </button>
           <button
             onClick={() => setShowConfirmDelete(true)}
             title="Delete Habit"
-            className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-zinc-800/80 transition-colors"
+            className="neo-button p-1.5 rounded-lg text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -194,10 +194,10 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
 
       {/* Multi-Count Progress Stepper Bar */}
       {isMultiCount && (
-        <div className="mt-4 space-y-2 bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
+        <div className="neo-inset mt-4 space-y-2 p-3 rounded-xl">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-zinc-400 font-medium">Daily Progress</span>
-            <span className="font-bold text-indigo-400">
+            <span className="text-zinc-500 dark:text-zinc-400 font-medium">Daily Progress</span>
+            <span className="font-bold text-indigo-600 dark:text-indigo-400">
               {currentLoggedValue} / {targetValue} {habit.unit || "times"}
             </span>
           </div>
@@ -205,21 +205,21 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
             <button
               onClick={() => handleStepValue(-1)}
               disabled={isPending || currentLoggedValue <= 0}
-              className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold disabled:opacity-30 transition-colors"
+              className="neo-button flex h-7 w-7 items-center justify-center rounded-lg text-zinc-700 dark:text-zinc-300 text-xs font-bold disabled:opacity-30 transition-colors"
               title="Decrease count"
             >
               <Minus className="h-3.5 w-3.5" />
             </button>
-            <div className="flex-1 h-2 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+            <div className="neo-inset flex-1 h-2 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-500 dark:to-violet-500 rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(100, (currentLoggedValue / targetValue) * 100)}%` }}
               />
             </div>
             <button
               onClick={() => handleStepValue(1)}
               disabled={isPending}
-              className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-sm shadow-indigo-600/20 disabled:opacity-40 transition-colors"
+              className="neo-button flex h-7 w-7 items-center justify-center rounded-lg text-indigo-600 dark:text-indigo-300 text-xs font-bold disabled:opacity-40 transition-colors"
               title="Increase count"
             >
               <Plus className="h-3.5 w-3.5" />
@@ -229,7 +229,7 @@ export function HabitCard({ habit, onRefresh }: HabitCardProps) {
       )}
 
       {/* Target details */}
-      <div className="mt-4 flex items-center justify-between text-[11px] text-zinc-500 border-t border-zinc-800/50 pt-3">
+      <div className="mt-4 flex items-center justify-between text-[11px] text-zinc-500 border-t border-zinc-200 dark:border-zinc-800/50 pt-3">
         <div className="flex items-center gap-1">
           <Calendar className="h-3 w-3" />
           <span>
