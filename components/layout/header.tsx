@@ -88,6 +88,8 @@ export function Header({
           </button>
         )}
 
+        <ThemeToggle />
+
         {/* Profile Avatar */}
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/20 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-300">
           <User className="h-4 w-4" />

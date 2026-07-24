@@ -1,12 +1,20 @@
 "use client";
 
-import { LucideIcon, TrendingUp, Sparkles } from "lucide-react";
+import { LucideIcon, TrendingUp, Sparkles, Moon, Zap, BookOpen, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  Moon,
+  Zap,
+  BookOpen,
+  Activity,
+};
 
 interface CorrelationCardProps {
   title: string;
   subtitle: string;
-  icon: LucideIcon;
+  iconName?: string;
+  icon?: LucideIcon;
   primaryMetric: { label: string; value: string | number };
   secondaryMetric: { label: string; value: string | number };
   impactText: string;
@@ -16,18 +24,20 @@ interface CorrelationCardProps {
 export function CorrelationCard({
   title,
   subtitle,
-  icon: Icon,
+  iconName,
+  icon,
   primaryMetric,
   secondaryMetric,
   impactText,
   isPositive = true,
 }: CorrelationCardProps) {
+  const IconComponent = icon || (iconName ? ICON_MAP[iconName] : undefined) || Activity;
   return (
     <div className="flex flex-col justify-between rounded-2xl bg-zinc-900/60 border border-zinc-800/80 p-5 space-y-4 hover:border-zinc-700/80 transition-all">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-            <Icon className="h-5 w-5" />
+            <IconComponent className="h-5 w-5" />
           </div>
           <div>
             <h3 className="font-bold text-sm text-zinc-100">{title}</h3>

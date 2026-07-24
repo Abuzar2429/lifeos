@@ -162,7 +162,7 @@ export function CheckInModal({
                   <Moon className="h-4 w-4 text-indigo-400" />
                   Sleep Duration
                 </label>
-                <span className="text-sm font-bold text-indigo-300">
+                <span className="text-sm font-bold text-indigo-300 font-mono">
                   {formData.sleepHours} hrs
                 </span>
               </div>
@@ -177,6 +177,23 @@ export function CheckInModal({
                 }
                 className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
+              {/* Quick Sleep Preset Chips */}
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[6, 6.5, 7, 7.5, 8, 8.5, 9].map((hrs) => (
+                  <button
+                    key={hrs}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, sleepHours: hrs })}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all ${
+                      formData.sleepHours === hrs
+                        ? "bg-indigo-600/30 border-indigo-500 text-indigo-200"
+                        : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                    }`}
+                  >
+                    {hrs}h
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Water */}
@@ -186,7 +203,7 @@ export function CheckInModal({
                   <Droplets className="h-4 w-4 text-cyan-400" />
                   Water Intake
                 </label>
-                <span className="text-sm font-bold text-cyan-300">
+                <span className="text-sm font-bold text-cyan-300 font-mono">
                   {formData.waterGlasses} glasses
                 </span>
               </div>
@@ -231,13 +248,16 @@ export function CheckInModal({
             </div>
           </div>
 
-          {/* Activity Metrics */}
+          {/* Activity Metrics with Timing Presets */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             {/* Workout */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-zinc-400 flex items-center gap-1.5">
-                <Dumbbell className="h-3.5 w-3.5 text-rose-400" />
-                Workout (mins)
+            <div className="space-y-1.5 p-3 rounded-xl bg-zinc-950/40 border border-zinc-800/60">
+              <label className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5 justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Dumbbell className="h-3.5 w-3.5 text-rose-400" />
+                  Workout
+                </span>
+                <span className="text-xs font-mono font-bold text-rose-300">{formData.workoutMins}m</span>
               </label>
               <input
                 type="number"
@@ -250,15 +270,34 @@ export function CheckInModal({
                     workoutMins: parseInt(e.target.value) || 0,
                   })
                 }
-                className="w-full px-3 py-2 rounded-xl bg-zinc-950/80 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500 font-mono"
               />
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[15, 30, 45, 60].map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, workoutMins: m })}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold border transition-all ${
+                      formData.workoutMins === m
+                        ? "bg-rose-500/20 border-rose-500 text-rose-300"
+                        : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300"
+                    }`}
+                  >
+                    {m}m
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Study */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-zinc-400 flex items-center gap-1.5">
-                <GraduationCap className="h-3.5 w-3.5 text-violet-400" />
-                Study (hrs)
+            <div className="space-y-1.5 p-3 rounded-xl bg-zinc-950/40 border border-zinc-800/60">
+              <label className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5 justify-between">
+                <span className="flex items-center gap-1.5">
+                  <GraduationCap className="h-3.5 w-3.5 text-violet-400" />
+                  Study Focus
+                </span>
+                <span className="text-xs font-mono font-bold text-violet-300">{formData.studyHours}h</span>
               </label>
               <input
                 type="number"
@@ -271,15 +310,34 @@ export function CheckInModal({
                     studyHours: parseFloat(e.target.value) || 0,
                   })
                 }
-                className="w-full px-3 py-2 rounded-xl bg-zinc-950/80 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500 font-mono"
               />
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[0.5, 1, 1.5, 2, 2.5, 3, 4].map((hrs) => (
+                  <button
+                    key={hrs}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, studyHours: hrs })}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold border transition-all ${
+                      formData.studyHours === hrs
+                        ? "bg-violet-500/20 border-violet-500 text-violet-300"
+                        : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300"
+                    }`}
+                  >
+                    {hrs}h
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Reading */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-zinc-400 flex items-center gap-1.5">
-                <BookOpen className="h-3.5 w-3.5 text-emerald-400" />
-                Reading (mins)
+            <div className="space-y-1.5 p-3 rounded-xl bg-zinc-950/40 border border-zinc-800/60">
+              <label className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5 justify-between">
+                <span className="flex items-center gap-1.5">
+                  <BookOpen className="h-3.5 w-3.5 text-emerald-400" />
+                  Reading
+                </span>
+                <span className="text-xs font-mono font-bold text-emerald-300">{formData.readingMins}m</span>
               </label>
               <input
                 type="number"
@@ -292,8 +350,24 @@ export function CheckInModal({
                     readingMins: parseInt(e.target.value) || 0,
                   })
                 }
-                className="w-full px-3 py-2 rounded-xl bg-zinc-950/80 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500 font-mono"
               />
+              <div className="flex flex-wrap gap-1 pt-1">
+                {[15, 30, 45, 60].map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, readingMins: m })}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold border transition-all ${
+                      formData.readingMins === m
+                        ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
+                        : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300"
+                    }`}
+                  >
+                    {m}m
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

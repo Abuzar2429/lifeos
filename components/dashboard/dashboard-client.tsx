@@ -11,13 +11,10 @@ import {
   Target,
   CheckSquare,
   Heart,
-  Zap,
   ShieldCheck,
   Download,
   Star,
   Quote,
-  Flame,
-  CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
@@ -25,7 +22,9 @@ import { MetricCard } from "@/components/dashboard/metric-card";
 import { TrendWidget, CheckInHistoryItem } from "@/components/dashboard/trend-widget";
 import { DailyDigestWidget } from "@/components/dashboard/daily-digest-widget";
 import { HydrationWidget } from "@/components/dashboard/hydration-widget";
+import { PomodoroWidget } from "@/components/focus/pomodoro-widget";
 import { type ExecutiveDigest } from "@/lib/actions/digest";
+import { DashboardLoggingBar } from "@/components/dashboard/dashboard-logging-bar";
 import { type CheckInInput } from "@/lib/scoring";
 
 interface DashboardClientProps {
@@ -72,8 +71,14 @@ export function DashboardClient({
       {/* 1. Calming Executive Daily Digest Banner */}
       <DailyDigestWidget digest={digest} />
 
-      {/* 2. Soft Neumorphic Hydration Tracker */}
-      <HydrationWidget currentGlasses={todayCheckIn?.waterGlasses ?? 0} />
+      {/* 2. Direct Dashboard Health & Productivity Console */}
+      <DashboardLoggingBar initialCheckIn={todayCheckIn} />
+
+      {/* 3. Hydration Tracker & LifeOS Focus Engine */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <HydrationWidget currentGlasses={todayCheckIn?.waterGlasses ?? 0} />
+        <PomodoroWidget />
+      </div>
 
       {/* 3. Calming Health & Wellness Telemetry Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

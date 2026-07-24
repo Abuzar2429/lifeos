@@ -73,7 +73,7 @@ export async function askAICoach(userPrompt: string): Promise<AICoachResponse> {
           "Hydrate with 8 glasses of water",
           "Schedule a 30-min workout session",
         ],
-        contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle },
+        contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle, recentMood },
       };
     }
 
@@ -85,7 +85,7 @@ export async function askAICoach(userPrompt: string): Promise<AICoachResponse> {
           "Focus on your top daily habit first thing in the morning",
           "Never skip two days in a row to protect momentum",
         ],
-        contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle },
+        contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle, recentMood },
       };
     }
 
@@ -99,7 +99,7 @@ export async function askAICoach(userPrompt: string): Promise<AICoachResponse> {
             `Complete sub-milestone for "${goal.title}"`,
             "Review weekly goal target allocations",
           ],
-          contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: goal.title },
+          contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: goal.title, recentMood },
         };
       } else {
         return {
@@ -118,6 +118,7 @@ export async function askAICoach(userPrompt: string): Promise<AICoachResponse> {
           "Write a 2-minute evening reflection",
           "Use mood tags like #gratitude or #mindset to track emotional trends",
         ],
+        contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle, recentMood },
       };
     }
 
@@ -130,7 +131,7 @@ export async function askAICoach(userPrompt: string): Promise<AICoachResponse> {
         "Help me break down my primary goal",
         "Analyze my reflection sentiment",
       ],
-      contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle },
+      contextData: { dailyScore: currentScore, sleepHours: sleep, activeStreak: maxStreak, topGoal: topGoalTitle, recentMood },
     };
   } catch (error) {
     console.error("Error in AI Coach processing:", error);

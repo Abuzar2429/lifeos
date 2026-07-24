@@ -81,62 +81,57 @@ export function isHabitScheduled(habit: { frequency: string; customDays: string 
  * Calculates current streak, longest streak, and weekly history for a habit.
  */
 export function calculateHabitStats(habit: HabitWithLogs) {
-  // Extract all completed log dates formatted as YYYY-MM-DD
-  const completedDates = new Set<string>();
+  const target = habit.targetValue || 1;
+
+  // Map log values by YYYY-MM-DD date string
+  const logMap = new Map<string, { val: number; completed: boolean }>();
   habit.logs.forEach((log) => {
-    const isCompleted = log.status || (log.value ?? 1) >= (habit.targetValue || 1);
-    if (isCompleted) {
-      completedDates.add(formatDateLocal(new Date(log.date)));
-    }
+    const dateStr = formatDateLocal(new Date(log.date));
+    const val = log.value ?? (log.status ? target : 0);
+    const isFullCompleted = log.status || val >= target;
+    logMap.set(dateStr, { val, completed: isFullCompleted });
   });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // 1. Calculate Current Streak
+  const oldestAllowed = new Date(habit.createdAt);
+  oldestAllowed.setHours(0, 0, 0, 0);
+  const capDate = subDays(new Date(), 365);
+  const stopDate = oldestAllowed > capDate ? oldestAllowed : capDate;
+
+  // 1. Calculate Current Streak (Full or Partial >= 50% maintains streak)
   let currentStreak = 0;
   let foundFirstCompleted = false;
   let checkDate = new Date(today);
-
-  // Walk backwards up to 365 days or habit creation date
-  const oldestAllowed = new Date(habit.createdAt);
-  oldestAllowed.setHours(0, 0, 0, 0);
-  
-  // Also guard against infinite loops by capping at 365 days using date-fns
-  const capDate = subDays(new Date(), 365);
-  const stopDate = oldestAllowed > capDate ? oldestAllowed : capDate;
 
   while (checkDate >= stopDate) {
     const dateStr = formatDateLocal(checkDate);
     const scheduled = isHabitScheduled(habit, checkDate);
 
     if (scheduled) {
-      const completed = completedDates.has(dateStr);
+      const logData = logMap.get(dateStr);
+      const val = logData?.val ?? 0;
+      const isOk = (logData?.completed ?? false) || (target > 0 && val / target >= 0.5);
 
-      if (completed) {
+      if (isOk) {
         currentStreak++;
         foundFirstCompleted = true;
       } else {
-        // If today is scheduled and not completed, we can skip it without breaking
-        // the streak, but only if we haven't found any completed day yet (i.e. starting from today).
         const isCheckingToday = checkDate.getTime() === today.getTime();
         if (isCheckingToday && !foundFirstCompleted) {
-          // Do nothing, proceed to check yesterday
+          // Skip today if unlogged yet
         } else {
-          // We hit a scheduled day that was missed. Streak ends here.
           break;
         }
       }
     }
-    // Go to previous day using date-fns
     checkDate = subDays(checkDate, 1);
   }
 
   // 2. Calculate Longest Streak
   let longestStreak = 0;
   let runningStreak = 0;
-  
-  // Start from habit creation date or 365 days ago, whichever is later
   let forwardDate = new Date(stopDate);
   forwardDate.setHours(0, 0, 0, 0);
 
@@ -145,26 +140,34 @@ export function calculateHabitStats(habit: HabitWithLogs) {
     const scheduled = isHabitScheduled(habit, forwardDate);
 
     if (scheduled) {
-      const completed = completedDates.has(dateStr);
-      if (completed) {
+      const logData = logMap.get(dateStr);
+      const val = logData?.val ?? 0;
+      const isOk = (logData?.completed ?? false) || (target > 0 && val / target >= 0.5);
+
+      if (isOk) {
         runningStreak++;
         if (runningStreak > longestStreak) {
           longestStreak = runningStreak;
         }
       } else {
-        // If it is today and not completed, don't break the running streak yet
         const isCheckingToday = forwardDate.getTime() === today.getTime();
         if (!isCheckingToday) {
           runningStreak = 0;
         }
       }
     }
-
     forwardDate = addDays(forwardDate, 1);
   }
 
-  // 3. Compute 7-day Weekly History
-  const weeklyHistory: { dateStr: string; dayName: string; status: "completed" | "missed" | "not-scheduled" }[] = [];
+  // 3. Compute 7-day Weekly History (Full, Partial, Missed, Not-scheduled)
+  const weeklyHistory: {
+    dateStr: string;
+    dayName: string;
+    status: "completed" | "partial" | "missed" | "not-scheduled";
+    loggedValue: number;
+    targetValue: number;
+    percent: number;
+  }[] = [];
   const daysOfWeekShorthand = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   for (let i = 6; i >= 0; i--) {
@@ -174,41 +177,60 @@ export function calculateHabitStats(habit: HabitWithLogs) {
     const dateStr = formatDateLocal(d);
     const dayName = daysOfWeekShorthand[d.getDay()];
     const scheduled = isHabitScheduled(habit, d);
-    const completed = completedDates.has(dateStr);
+    const logData = logMap.get(dateStr);
+    const val = logData?.val ?? 0;
+    const isCompleted = (logData?.completed ?? false) || val >= target;
+    const percent = Math.min(100, Math.round((val / target) * 100));
 
-    let status: "completed" | "missed" | "not-scheduled" = "not-scheduled";
+    let status: "completed" | "partial" | "missed" | "not-scheduled" = "not-scheduled";
     if (scheduled) {
-      status = completed ? "completed" : "missed";
+      if (isCompleted) {
+        status = "completed";
+      } else if (val > 0) {
+        status = "partial";
+      } else {
+        status = "missed";
+      }
     }
 
     weeklyHistory.push({
       dateStr,
       dayName,
       status,
+      loggedValue: val,
+      targetValue: target,
+      percent,
     });
   }
 
-  // 4. Calculate overall completion rate
+  // 4. Calculate Proportional Completion Rate
   let totalScheduled = 0;
-  let totalCompleted = 0;
+  let totalFractionalProgress = 0;
   let rateCheck = new Date(stopDate);
+
   while (rateCheck <= today) {
     if (isHabitScheduled(habit, rateCheck)) {
       totalScheduled++;
-      if (completedDates.has(formatDateLocal(rateCheck))) {
-        totalCompleted++;
+      const dateStr = formatDateLocal(rateCheck);
+      const logData = logMap.get(dateStr);
+      if (logData) {
+        if (logData.completed) {
+          totalFractionalProgress += 1.0;
+        } else if (logData.val > 0) {
+          totalFractionalProgress += Math.min(1.0, logData.val / target);
+        }
       }
     }
     rateCheck = addDays(rateCheck, 1);
   }
 
-  const completionRate = totalScheduled > 0 ? Math.round((totalCompleted / totalScheduled) * 100) : 0;
+  const completionRate = totalScheduled > 0 ? Math.round((totalFractionalProgress / totalScheduled) * 100) : 0;
 
   return {
     currentStreak,
     longestStreak,
     weeklyHistory,
     completionRate,
-    totalCompletions: completedDates.size,
+    totalCompletions: logMap.size,
   };
 }

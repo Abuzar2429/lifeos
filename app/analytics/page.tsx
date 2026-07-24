@@ -1,3 +1,4 @@
+import { AppShell } from "@/components/layout/app-shell";
 import { getAnalyticsData } from "@/lib/actions/analytics";
 import { get365DayHeatmap } from "@/lib/actions/heatmap";
 import { CorrelationCard } from "@/components/analytics/correlation-card";
@@ -8,7 +9,6 @@ import {
   Dumbbell,
   BookOpen,
   Sparkles,
-  Zap,
   Activity,
   Heart,
   TrendingUp,
@@ -21,7 +21,8 @@ export default async function AnalyticsPage() {
   const heatmapDays = await get365DayHeatmap();
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <AppShell>
+      <div className="max-w-6xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-violet-950/40 via-zinc-900/60 to-zinc-950/80 p-6 md:p-8 rounded-3xl border border-violet-500/20 shadow-xl">
         <div className="space-y-2">
@@ -102,7 +103,7 @@ export default async function AnalyticsPage() {
           <CorrelationCard
             title="Sleep vs. Daily Score"
             subtitle="7-9h Target Window"
-            icon={Moon}
+            iconName="Moon"
             primaryMetric={{ label: "Optimal Sleep Score", value: `${data.correlations.sleepVsScore.optimalAvg} pts` }}
             secondaryMetric={{ label: "Sub-Optimal Score", value: `${data.correlations.sleepVsScore.subAvg} pts` }}
             impactText={`Optimal sleep delivers +${data.correlations.sleepVsScore.difference} pts higher performance.`}
@@ -112,7 +113,7 @@ export default async function AnalyticsPage() {
           <CorrelationCard
             title="Exercise vs. Energy"
             subtitle="20+ Mins Active Days"
-            icon={Zap}
+            iconName="Zap"
             primaryMetric={{ label: "Active Day Energy", value: `${data.correlations.workoutVsEnergy.workoutAvg} ★` }}
             secondaryMetric={{ label: "Rest Day Energy", value: `${data.correlations.workoutVsEnergy.restAvg} ★` }}
             impactText={`Movement yields +${data.correlations.workoutVsEnergy.difference} star increase in vitality.`}
@@ -122,7 +123,7 @@ export default async function AnalyticsPage() {
           <CorrelationCard
             title="Journaling vs. Mood"
             subtitle="Daily Reflection Entries"
-            icon={BookOpen}
+            iconName="BookOpen"
             primaryMetric={{ label: "Journaled Day Mood", value: `${data.correlations.journalVsMood.journalAvg} ★` }}
             secondaryMetric={{ label: "Unlogged Day Mood", value: `${data.correlations.journalVsMood.nonJournalAvg} ★` }}
             impactText={`Reflection adds +${data.correlations.journalVsMood.difference} star emotional clarity.`}
@@ -153,5 +154,6 @@ export default async function AnalyticsPage() {
         </div>
       </div>
     </div>
+    </AppShell>
   );
 }

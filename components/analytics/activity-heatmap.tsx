@@ -1,10 +1,18 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { ActivityCalendar, type Activity } from "react-activity-calendar";
 import { Calendar, Activity as ActivityIcon } from "lucide-react";
 import type { HeatmapDay } from "@/lib/actions/heatmap";
 
+const emptySubscribe = () => () => {};
+
 export function ActivityHeatmap({ days }: { days: HeatmapDay[] }) {
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
   const calendarData: Activity[] = days.map((d) => ({
     date: d.dateStr,
     count: d.habitsCompleted || (d.score > 0 ? 1 : 0),
@@ -36,10 +44,15 @@ export function ActivityHeatmap({ days }: { days: HeatmapDay[] }) {
       </div>
 
       {/* React Activity Calendar Component */}
-      <div className="flex justify-center overflow-x-auto py-2">
-        {calendarData.length > 0 ? (
+      <div className="flex justify-center overflow-x-auto py-2 min-h-[160px] items-center">
+        {!mounted ? (
+          <div className="h-28 w-full max-w-4xl bg-zinc-950/40 border border-zinc-800/40 rounded-2xl animate-pulse flex items-center justify-center text-xs text-zinc-500">
+            Loading Consistency Heatmap...
+          </div>
+        ) : calendarData.length > 0 ? (
           <ActivityCalendar
             data={calendarData}
+            colorScheme="dark"
             theme={{
               dark: ["#18181b", "#312e81", "#4338ca", "#6366f1", "#a855f7"],
             }}

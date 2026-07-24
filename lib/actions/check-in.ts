@@ -168,7 +168,7 @@ export async function incrementWaterGlass(delta: number = 1) {
       };
       const dailyScore = calculateDailyScore(updatedInput);
 
-      const updated = await prisma.dailyCheckIn.update({
+      await prisma.dailyCheckIn.update({
         where: { id: existing.id },
         data: {
           waterGlasses: newGlasses,
@@ -191,7 +191,7 @@ export async function incrementWaterGlass(delta: number = 1) {
       };
       const dailyScore = calculateDailyScore(newInput);
 
-      const created = await prisma.dailyCheckIn.create({
+      await prisma.dailyCheckIn.create({
         data: {
           userId: user.id,
           date: todayMidnight,

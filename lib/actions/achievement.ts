@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import { getOrCreateDemoUser } from "./check-in";
 import { calculateHabitStats, type HabitWithLogs } from "@/lib/utils/habit-streaks";
 

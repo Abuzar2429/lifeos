@@ -38,7 +38,7 @@ export function AIChatInterface({ initialResponse }: { initialResponse: AICoachR
     if (!prompt.trim() || loading) return;
 
     const userMsg: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       sender: "user",
       text: prompt,
     };
@@ -50,7 +50,7 @@ export function AIChatInterface({ initialResponse }: { initialResponse: AICoachR
     try {
       const res = await askAICoach(prompt);
       const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
+        id: crypto.randomUUID(),
         sender: "ai",
         text: res.reply,
         actionables: res.actionables,

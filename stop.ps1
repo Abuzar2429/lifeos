@@ -21,4 +21,4 @@ if ($connections) {
 Write-Host "Stopping Node processes..." -ForegroundColor Yellow
 taskkill /F /IM node.exe /T 2>$null
 
-Write-Host "`n✓ LifeOS stopped successfully!" -ForegroundColor Green
+Write-Host "`nLifeOS stopped successfully!" -ForegroundColor Green

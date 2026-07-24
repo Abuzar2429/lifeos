@@ -8,6 +8,8 @@
     "start": "next start",
     "start:app": "powershell -ExecutionPolicy Bypass -File ./start.ps1",
     "stop:app": "powershell -ExecutionPolicy Bypass -File ./stop.ps1",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
     "lint": "eslint"
   },
   "dependencies": {
