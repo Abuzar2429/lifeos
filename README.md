@@ -30,3 +30,7 @@ A comprehensive personal productivity dashboard built with Next.js, React, Tailw
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Documentation & Changelog 📖
+
+For a history of project updates, release notes, and feature additions, see [CHANGELOG.md](CHANGELOG.md).
+
