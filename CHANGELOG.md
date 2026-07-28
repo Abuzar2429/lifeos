@@ -5,6 +5,14 @@ All notable changes to the **LifeOS** project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-07-28
+
+### Added
+- **GitHub Bright Green Theme**: Added signature GitHub `#39d353` bright green activity theme palette and theme switcher toggle to `ActivityHeatmap`.
+- **Git Green Dashboard Badge**: Integrated `GitGreenBadge` component on the main dashboard to visualize today's GitHub contribution status and level 4 activity streak.
+- **Heatmap Boost Server Action**: Added `boostTodayToBrightGreen` server action to bump today's daily check-in score and habit intensity to level 4 maximum green.
+- **Green Git Script**: Created `scripts/green-git-today.ps1` helper script for automated git activity logging and contribution tracking.
+
 ## [0.1.0] - 2026-07-26
 
 ### Added
