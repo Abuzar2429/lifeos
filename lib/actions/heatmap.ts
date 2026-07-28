@@ -79,3 +79,51 @@ export async function get365DayHeatmap(): Promise<HeatmapDay[]> {
     return [];
   }
 }
+
+export async function boostTodayToBrightGreen(): Promise<{ success: boolean; message: string }> {
+  try {
+    const user = await getOrCreateDemoUser();
+    const today = startOfDay(new Date());
+
+    const existingCheckIn = await prisma.dailyCheckIn.findFirst({
+      where: {
+        userId: user.id,
+        date: today,
+      },
+    });
+
+    if (existingCheckIn) {
+      await prisma.dailyCheckIn.update({
+        where: { id: existingCheckIn.id },
+        data: {
+          dailyScore: 100,
+          mood: 5,
+          energy: 5,
+          reflectionNote: "Today's activity boosted to Bright Green!",
+        },
+      });
+    } else {
+      await prisma.dailyCheckIn.create({
+        data: {
+          userId: user.id,
+          date: today,
+          dailyScore: 100,
+          mood: 5,
+          energy: 5,
+          reflectionNote: "Today's activity boosted to Bright Green!",
+        },
+      });
+    }
+
+    return {
+      success: true,
+      message: "Today's activity boosted to Bright Green (Level 4: Maximum Green)!",
+    };
+  } catch (error) {
+    console.error("Error boosting today's heatmap score:", error);
+    return {
+      success: false,
+      message: "Failed to boost today's activity status.",
+    };
+  }
+}
